@@ -27,6 +27,7 @@ if __name__ == '__main__':
     parser.add_argument('--model', type=str, default='mobilenet_thin', help='cmu / mobilenet_thin')
     parser.add_argument('--show-process', type=bool, default=False,
                         help='for debug purpose, if enabled, speed for inference is dropped.')
+    parser.add_argument('--magnify', type=float, default=1.0)
     args = parser.parse_args()
 
     logger.debug('initialization %s : %s' % (args.model, get_graph_path(args.model)))
@@ -65,6 +66,8 @@ if __name__ == '__main__':
                     "FPS: %f" % (1.0 / (time.time() - fps_time)),
                     (10, 10),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                     (0, 255, 0), 2)
+        image = cv2.resize(image, None, fx=args.magnify, fy=args.magnify,
+                           interpolation=cv2.INTER_LINEAR)
         cv2.imshow('tf-pose-estimation result', image)
         fps_time = time.time()
         if cv2.waitKey(1) == 27:
