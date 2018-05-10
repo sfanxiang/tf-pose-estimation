@@ -389,7 +389,7 @@ def get_dataflow_batch(path, is_train, batchsize, img_path=None):
 
 class DataFlowToQueue(threading.Thread):
     def __init__(self, ds, placeholders, queue_size=5):
-        super(DataFlowToQueue).__init__()
+        super(DataFlowToQueue, self).__init__()
         self.daemon = True
 
         self.ds = ds
@@ -459,15 +459,10 @@ class DataFlowToQueue(threading.Thread):
 if __name__ == '__main__':
     os.environ['CUDA_VISIBLE_DEVICES'] = ''
 
-    from src.pose_augment import set_network_input_wh
-    # set_network_input_wh(368, 368)
-    set_network_input_wh(480, 320)
+    from pose_augment import set_network_input_wh
+    set_network_input_wh(256, 144)
 
-    df = get_dataflow('/root/coco/annotations', True, img_path='http://gpu-twg.kakaocdn.net/braincloud/COCO/')
-    # df = get_dataflow('/root/coco/annotations', False, img_path='http://gpu-twg.kakaocdn.net/braincloud/COCO/')
-
-    # TestDataSpeed(df).start()
-    # sys.exit(0)
+    df = get_dataflow('labels/', True, img_path='data/')
 
     with tf.Session() as sess:
         df.reset_state()
